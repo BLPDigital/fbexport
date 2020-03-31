@@ -41,7 +41,7 @@ EOF
 )
 
 if [ ! -f "${DB_DIR}/global.fdb" -a -n "${FIREBIRD_PASSWORD}" ]; then
-    echo "${USER_CONF}" | isql-fb
+    echo "${USER_CONF}" | isql-fb -q
 fi
 
 source /usr/local/bin/database-init.sh
