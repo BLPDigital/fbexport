@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DB_DIR=/var/lib/firebird/3.0/data
-INIT_DIR=/etc/firebird/3.0/init
 DATA_DIR=/mnt/firebird-init
 
 GENERATED_FILES=(
@@ -27,11 +25,6 @@ function load_data() {
 
 function database_init() {
     export FIREBIRD_DATABASE=$1
-
-    exits=$(grep "${DB_DIR}/${FIREBIRD_DATABASE}" /etc/firebird/3.0/databases.conf)
-    if [ "$?" -ne 0 ]; then
-        echo "${FIREBIRD_DATABASE} = ${DB_DIR}/${FIREBIRD_DATABASE}.fdb" >> /etc/firebird/3.0/databases.conf
-    fi
 
     cat "${INIT_DIR}/db_create.sql" | envsubst | isql-fb -q
 

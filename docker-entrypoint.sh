@@ -2,6 +2,8 @@
 
 source /etc/firebird/3.0/SYSDBA.password
 
+set -x
+
 sed -i -e '/RemoteBindAddress =/ s/= .*/= /' /etc/firebird/3.0/firebird.conf
 
 export DB_DIR=/var/lib/firebird/3.0/data
@@ -47,6 +49,12 @@ fi
 source /usr/local/bin/database-init.sh
 
 for FIREBIRD_DATABASE in ${DATABASE_NAMES[@]}; do
+
+    exits=$(grep "${DB_DIR}/${FIREBIRD_DATABASE}" /etc/firebird/3.0/databases.conf)
+    if [ "$?" -ne 0 ]; then
+        echo "${FIREBIRD_DATABASE} = ${DB_DIR}/${FIREBIRD_DATABASE}.fdb" >> /etc/firebird/3.0/databases.conf
+    fi
+
     if [ ! -f "${DB_DIR}/${FIREBIRD_DATABASE}.fdb" ]; then
         database_init "${FIREBIRD_DATABASE}"
     fi
